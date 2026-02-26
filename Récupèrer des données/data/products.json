@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "title": "Organic Green Tea",
+    "description": "Refreshing green tea rich in antioxidants.",
+    "price": 12.99,
+    "image": "./assets/imgs/prod1.png",
+    "alt": "Organic Green Tea"
+  },
+  {
+    "id": 2,
+    "title": "Natural Honey",
+    "description": "Pure honey harvested from wildflowers.",
+    "price": 9.50,
+    "image": "./assets/imgs/prod2.png",
+    "alt": "Natural Honey"
+  },
+  {
+    "id": 3,
+    "title": "Handmade Soap",
+    "description": "Gentle soap made with natural essential oils.",
+    "price": 6.75,
+    "image": "./assets/imgs/prod3.png",
+    "alt": "Handmade Soap"
+  },
+  {
+    "id": 4,
+    "title": "Coffee Beans",
+    "description": "Freshly roasted Arabica coffee beans.",
+    "price": 14.20,
+    "image": "./assets/imgs/prod4.png",
+    "alt": "Coffee Beans"
+  }
+]
