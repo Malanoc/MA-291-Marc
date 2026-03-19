@@ -54,12 +54,16 @@ async function loadSalesPoints() {
   try {
     const salesPoints = await fetchSalesPoints();
     await displaySalesPoints(salesPoints);
+
   } catch (error) {
-    console.error(error);
+    console.error(error); // debug
+
     feedback.textContent = 'Impossible de charger les points de vente.';
+
+    // optionnel : vider la section
+    salesPointsContainer.innerHTML = '';
   }
 }
-
 // TODO task003: créer une fonction displaySalesPoints
 async function displaySalesPoints(salesPoints) {
 
@@ -86,24 +90,23 @@ async function displaySalesPoints(salesPoints) {
 
 async function toggleSalesPoints() {
 
-  // charger une seule fois
   if (!salesPointsLoaded) {
     try {
       await loadSalesPoints();
       salesPointsLoaded = true;
+
     } catch (error) {
       console.error(error);
-      feedback.textContent = 'Impossible de charger les points de vente.';
+
+      feedback.textContent = 'Impossible de charger les points de vente. &#9888;';
       return;
     }
   }
 
-  // toggle affichage
   isSalesPointsVisible = !isSalesPointsVisible;
 
   salesPointsContainer.style.display = isSalesPointsVisible ? 'block' : 'none';
 
-  // change le texte du bouton
   toggleSalesPointsBtn.textContent = isSalesPointsVisible
       ? 'Masquer les points de vente'
       : 'Afficher les points de vente';
