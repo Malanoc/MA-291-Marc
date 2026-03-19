@@ -1,36 +1,42 @@
+// Import des fonctions pour récupérer les données
 import fetchSnacks from './fetchSnacks.js';
 import fetchSalesPoints from './fetchSalesPoints.js';
 
-const loadSnacksBtn = document.querySelector('#load-snacks-btn');
-const snacksContainer = document.querySelector('#snacks-container');
-const feedback = document.querySelector('#feedback');
-const salesPointsContainer = document.querySelector('#sales-points-container');
-// TODO task004: ajouter les références DOM nécessaires pour les points de vente
-const toggleSalesPointsBtn = document.querySelector('#toggle-sales-points-btn');
+// Récupération des éléments du DOM
+const loadSnacksBtn = document.querySelector('#load-snacks-btn'); // bouton pour charger les snacks
+const snacksContainer = document.querySelector('#snacks-container'); // conteneur des snacks
+const feedback = document.querySelector('#feedback'); // zone d'affichage des messages (erreurs, infos)
+const salesPointsContainer = document.querySelector('#sales-points-container'); // conteneur des points de vente
+const toggleSalesPointsBtn = document.querySelector('#toggle-sales-points-btn'); // bouton afficher/masquer
 
-// TODO task004: prévoir une variable d'état pour éviter de recharger inutilement les données
-let isSalesPointsVisible = false;
-let salesPointsLoaded = false;
+// Variables d'état
+let isSalesPointsVisible = false; // indique si la section est visible ou non
+let salesPointsLoaded = false;   // évite de recharger les données plusieurs fois
 
+// Association des événements aux boutons
 loadSnacksBtn.addEventListener('click', loadSnacks);
-// TODO task004: brancher ici l'événement du bouton des points de vente
 toggleSalesPointsBtn.addEventListener('click', toggleSalesPoints);
 
-// cacher la section au départ
+// Cache la section des points de vente au chargement de la page
 salesPointsContainer.style.display = 'none';
 
+
+// ===================== SNACKS =====================
+
+// Fonction appelée au clic sur "Load snacks"
 async function loadSnacks() {
-  feedback.textContent = '';
+  feedback.textContent = ''; // reset message utilisateur
 
   try {
-    const snacks = await fetchSnacks();
-    displaySnacks(snacks);
+    const snacks = await fetchSnacks(); // récupération des données
+    displaySnacks(snacks); // affichage
   } catch (error) {
-    console.error(error);
-    feedback.textContent = 'Impossible de charger les snacks.';
+    console.error(error); // debug console
+    feedback.textContent = 'Impossible de charger les snacks.'; // message utilisateur
   }
 }
 
+// Affichage des snacks dans le DOM
 function displaySnacks(snacks) {
   snacksContainer.innerHTML = snacks.map((snack) => `
     <article class="card">
@@ -43,41 +49,45 @@ function displaySnacks(snacks) {
       </div>
     </article>
   `).join('');
-
-  // TODO task002: adapter le rendu selon le cahier des charges
 }
 
-// TODO task003: créer une fonction loadSalesPoints
+
+// ===================== POINTS DE VENTE =====================
+
+// Charge les données des points de vente
 async function loadSalesPoints() {
-  feedback.textContent = '';
+  feedback.textContent = ''; // reset message
 
   try {
-    const salesPoints = await fetchSalesPoints();
-    await displaySalesPoints(salesPoints);
+    const salesPoints = await fetchSalesPoints(); // fetch JSON
+    await displaySalesPoints(salesPoints); // affichage avec template
 
   } catch (error) {
     console.error(error); // debug
 
+    // message visible pour l'utilisateur
     feedback.textContent = 'Impossible de charger les points de vente.';
 
-    // optionnel : vider la section
+    // on vide le conteneur pour éviter d'afficher du contenu cassé
     salesPointsContainer.innerHTML = '';
   }
 }
-// TODO task003: créer une fonction displaySalesPoints
+
+
+// Affiche les points de vente en utilisant le template HTML fourni
 async function displaySalesPoints(salesPoints) {
 
-  // charger le template HTML fourni
+  // Chargement du template HTML externe
   const response = await fetch('../../specs/task003/index-sales-points.html');
   const template = await response.text();
 
-  // injecter le template
+  // Injection du template dans la page
   salesPointsContainer.innerHTML = template;
 
-  // récupérer la grille
+  // Sélection de la grille à l'intérieur du template
   const grid = salesPointsContainer.querySelector('.sales-points-grid');
 
-  // remplacer le contenu par les données JSON
+  // Remplacement du contenu exemple par les données réelles
   grid.innerHTML = salesPoints.map((sale) => `
     <article class="sales-point-card">
       <h3>${sale.building}</h3>
@@ -88,28 +98,33 @@ async function displaySalesPoints(salesPoints) {
   `).join('');
 }
 
+
+// ===================== Toggle boutton qui appelle loadSalesPoints =====================
+
+// Fonction pour afficher / masquer les points de vente
 async function toggleSalesPoints() {
 
+  // Si les données ne sont pas encore chargées → on les charge UNE seule fois
   if (!salesPointsLoaded) {
     try {
-      await loadSalesPoints();
-      salesPointsLoaded = true;
+      await loadSalesPoints(); // fetch + affichage
+      salesPointsLoaded = true; // on marque comme chargé
 
     } catch (error) {
       console.error(error);
-
-      feedback.textContent = 'Impossible de charger les points de vente. &#9888;';
-      return;
+      feedback.textContent = `Impossible de charger les points de vente.`;
+      return; // on stop si erreur
     }
   }
 
+  // Inverse l'état (visible / caché)
   isSalesPointsVisible = !isSalesPointsVisible;
 
+  // Applique l'affichage
   salesPointsContainer.style.display = isSalesPointsVisible ? 'block' : 'none';
 
+  // Met à jour le texte du bouton
   toggleSalesPointsBtn.textContent = isSalesPointsVisible
       ? 'Masquer les points de vente'
       : 'Afficher les points de vente';
 }
-
-// TODO task005: afficher un message lisible si le chargement échoue
