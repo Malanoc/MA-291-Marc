@@ -7,6 +7,7 @@
     <title>My Campus Snack Bar</title>
     <link rel="stylesheet" href="./assets/css/main.css">
     <!-- TODO task003: relier la feuille de style des points de vente -->
+    <link rel="stylesheet" href="../specs/task003/sales-points.css">
   </head>
 
   <body>
@@ -19,6 +20,7 @@
       <section class="toolbar">
         <button id="load-snacks-btn" type="button">Load snacks</button>
         <!-- TODO task004: ajouter le bouton pour les points de vente -->
+        <button id="toggle-sales-points-btn" type="button">Afficher les points de vente</button>
       </section>
 
       <section>
@@ -28,6 +30,9 @@
       </section>
 
       <!-- TODO task003: ajouter ici le conteneur de la section des points de vente -->
+      <section class="sales-points-section">
+        <div id="sales-points-container" class="sales-points-grid"></div>
+      </section>
     </main>
 
     <script type="module" src="./assets/js/main.js"></script>
